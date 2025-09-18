@@ -1,27 +1,16 @@
 const express = require('express')
-const { getContacts } = require("../controllers/contact.controller");
+const { getContacts,getContactById,createContact,deleteContactById,updateContactById} = require("../controllers/contact.controller");
 
-express.Router()
-const router = express.Router()
+const authMiddleware = require("../middleware/auth");
+const roleMiddleware = require("../middleware/roles");
 
-router.get("/contacts", getContacts);
+const router = express.Router();
 
-router.post('/contacts',(req,res)=>{
-    const newContact = {
-        id: Date.now(),
-        name: req.body.name,
-        email: req.body.email,
-        message: req.body.message
-    }
-    // Here you would typically save the new contact to a database
-    res.status(201).json(newContact)
-})  
-router.delete('/contacts/:id',(req,res)=>{
-    const id = parseInt(req.params.id)
-    // Here you would typically delete the contact from a database
-    res.json({message: `Contact with id ${id} deleted`})
-})
-
+router.get("/contacts",authMiddleware,getContacts);
+router.get("/contacts/:id",authMiddleware, getContactById);
+router.post("/contacts",authMiddleware,roleMiddleware(['admin']), createContact);
+router.delete("/contacts/:id",authMiddleware,roleMiddleware(['admin']), deleteContactById);
+router.put("/contacts/:id",authMiddleware,roleMiddleware(['admin']), updateContactById);
 
 
 module.exports = router;
