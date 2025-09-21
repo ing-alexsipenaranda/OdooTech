@@ -63,6 +63,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 //     }    
 //  })
 
-app.listen(app.get("port"),()=>{
-    console.log(`Server ${app.get("AppName")} running on port ${app.get("port")}`)
+
+//Starting the server LOCAL HOST
+// app.listen(app.get("port"),()=>{
+//     console.log(`Server ${app.get("AppName")} running on port ${app.get("port")}`)
+// })
+
+app.listen(app.get("port"), "0.0.0.0", () => {
+  console.log(`Server ${app.get("AppName")} running on port ${app.get("port")}`)
 })
